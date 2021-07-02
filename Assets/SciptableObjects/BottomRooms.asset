@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f2c09368721dd249b9885106de1375e, type: 3}
+  m_Name: BottomRooms
+  m_EditorClassIdentifier: 
+  rooms:
+  - {fileID: 3355569398373632222, guid: ec74cbb972c9897478e4c07f1c6a6719, type: 3}
+  - {fileID: 3554485663951445483, guid: 64cbe4d1f9979964f8e77373f8991559, type: 3}
+  - {fileID: 3554485663951445483, guid: 64cbe4d1f9979964f8e77373f8991559, type: 3}
+  - {fileID: 6799844405731030592, guid: 3a68b09b5912c574b9479bab17e6e1e2, type: 3}
+  - {fileID: 1884551903102532394, guid: e8e92941b8f61094b927ccd81a20885f, type: 3}
+  closedRoom: {fileID: 2879012691923588412, guid: 56f4c923ba89aa5409e12f08fd9f6003, type: 3}
