@@ -131,7 +131,7 @@ MonoBehaviour:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_LightVolumeOpacity: 0
-  m_ApplyToSortingLayers: 00000000
+  m_ApplyToSortingLayers: e39be0b9
   m_LightCookieSprite: {fileID: 0}
   m_UseNormalMap: 0
   m_LightOrder: 0
@@ -362,6 +362,7 @@ MonoBehaviour:
   movementSpeed: 5
   cam: {fileID: 0}
   impactEffects: {fileID: 3460860098763443809, guid: 34491e53c2a5d794084d2cba07a335b0, type: 3}
+  flashLight: {fileID: 0}
 --- !u!50 &2035243796309084954
 Rigidbody2D:
   serializedVersion: 4

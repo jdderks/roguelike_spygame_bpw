@@ -326,9 +326,10 @@ GameObject:
   - component: {fileID: 8127846663949895776}
   - component: {fileID: 8127846663949895777}
   - component: {fileID: 1060617068}
+  - component: {fileID: 807114045342417751}
   m_Layer: 7
   m_Name: Enemy
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -625,3 +626,29 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   visibleTargets: []
+--- !u!114 &807114045342417751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4332288487222043461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShadowGroup: 0
+  m_HasRenderer: 1
+  m_UseRendererSilhouette: 1
+  m_CastsShadows: 1
+  m_SelfShadows: 1
+  m_ApplyToSortingLayers: e39be0b9
+  m_ShapePath:
+  - {x: -0.5, y: 2.42, z: 0}
+  - {x: 0.5, y: 2.42, z: 0}
+  - {x: 0.5, y: 13.42, z: 0}
+  - {x: -0.5, y: 13.42, z: 0}
+  m_ShapePathHash: 0
+  m_Mesh: {fileID: 0}
+  m_InstanceId: -49300

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-enum SpawnDirection
+public enum SpawnDirection
 {
     Bottomdoor = 1,
     Topdoor = 2,
@@ -14,65 +14,66 @@ enum SpawnDirection
 public class RoomSpawnPoint : MonoBehaviour
 {
     [SerializeField] private SpawnDirection openingDirection;
-    [SerializeField] private GameObject enemy;
     [SerializeField] private RoomTemplate roomTemplates;
+
+    private RoomManager roomManager;
 
     private bool spawned;
 
     private int rand;
 
     public bool Spawned { get => spawned; set => spawned = value; }
+    public SpawnDirection OpeningDirection { get => openingDirection; set => openingDirection = value; }
 
     void Start()
+    {
+        roomManager = RoomManager.instance;
+        SpawnDungeon();
+    }
+
+    public void SpawnDungeon()
     {
         Invoke("SpawnRoom", 0.001f);
     }
 
-    void SpawnRoom()
+    public void SpawnRoom()
     {
-        if (spawned == false)
+        if (spawned == false && CheckValidSpawnPoint())
         {
-            switch (openingDirection)
+            switch (OpeningDirection)
             {
                 case SpawnDirection.Bottomdoor:
                     rand = Random.Range(0, roomTemplates.Rooms.Length);
-                    Instantiate(roomTemplates.Rooms[rand], transform.position, Quaternion.identity);
+                    Instantiate(roomTemplates.Rooms[rand], transform.position, Quaternion.identity, roomManager.RoomsParent);
                     break;
                 case SpawnDirection.Topdoor:
                     rand = Random.Range(0, roomTemplates.Rooms.Length);
-                    Instantiate(roomTemplates.Rooms[rand], transform.position, Quaternion.identity);
+                    Instantiate(roomTemplates.Rooms[rand], transform.position, Quaternion.identity, roomManager.RoomsParent);
                     break;
                 case SpawnDirection.Leftdoor:
                     rand = Random.Range(0, roomTemplates.Rooms.Length);
-                    Instantiate(roomTemplates.Rooms[rand], transform.position, Quaternion.identity);
+                    Instantiate(roomTemplates.Rooms[rand], transform.position, Quaternion.identity, roomManager.RoomsParent);
                     break;
                 case SpawnDirection.Rightdoor:
                     rand = Random.Range(0, roomTemplates.Rooms.Length);
-                    Instantiate(roomTemplates.Rooms[rand], transform.position, Quaternion.identity);
+                    Instantiate(roomTemplates.Rooms[rand], transform.position, Quaternion.identity, roomManager.RoomsParent);
                     break;
                 default:
                     break;
             }
-            if (gameObject.name != "StartRoom")
-            {
-                if (Random.Range(1, 100) > 70)
-                {
-                    Instantiate(enemy, transform.position, Quaternion.identity);
-                }
-            }
             spawned = true;
         }
     }
-    private void OnTriggerEnter2D(Collider2D other)
+
+    private bool CheckValidSpawnPoint()
     {
-        if (other.CompareTag("RoomSpawnPoint"))
+        for (int i = 0; i < roomManager.Rooms.Count; i++)
         {
-            if (other.GetComponent<RoomSpawnPoint>().spawned == false && spawned == false)
+            if (transform.position == roomManager.Rooms[i].transform.position)
             {
-                Instantiate(roomTemplates.ClosedRoom, transform.position, Quaternion.identity);
-                Destroy(gameObject);
+                return false;
             }
-            spawned = true;
         }
+        return true;
     }
 }
