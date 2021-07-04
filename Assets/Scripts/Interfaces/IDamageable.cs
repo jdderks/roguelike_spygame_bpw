@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IDamageable
 {
-    void Damage(int amount);
+    public void Damage(int amount);
 }

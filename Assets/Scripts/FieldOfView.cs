@@ -17,7 +17,7 @@ public class FieldOfView : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine("FindTargetWithDelay", 0.2f);
+        StartCoroutine("FindTargetWithDelay", 0.1f);
     }
 
     IEnumerator FindTargetWithDelay(float delay)

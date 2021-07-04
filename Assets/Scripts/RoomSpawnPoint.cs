@@ -86,7 +86,6 @@ public class RoomSpawnPoint : MonoBehaviour
             {
                 spawned = true;
             }
-
         }
     }
 

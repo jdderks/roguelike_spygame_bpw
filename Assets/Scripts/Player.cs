@@ -9,12 +9,13 @@ public class Player : MonoBehaviour
     [SerializeField] private Camera cam;
     [SerializeField] private GameObject impactEffects;
     [SerializeField] private GameObject flashLight;
+
     //Variables that are set in start
     private Rigidbody2D rb2d;
     private LineRenderer line;
     private Animator anim;
 
-
+    //Field of view related properties
     private FieldOfView fieldOfView;
     [SerializeField] private LayerMask seenLayer;
 
@@ -48,7 +49,7 @@ public class Player : MonoBehaviour
             if (flashLight.activeInHierarchy)
             {
                 flashLight.SetActive(false);
-            } 
+            }
             else
             {
                 flashLight.SetActive(true);
@@ -66,7 +67,10 @@ public class Player : MonoBehaviour
         for (int i = 0; i < fieldOfView.visibleTargets.Count; i++)
         {
             Debug.Log(fieldOfView.visibleTargets[i]);
-            fieldOfView.visibleTargets[i].GetComponent<Wall>().DiscoverWall();
+            if (fieldOfView.visibleTargets[i] != null)
+            {
+                fieldOfView.visibleTargets[i].GetComponent<Wall>().DiscoverWall();
+            }
         }
     }
 
@@ -80,19 +84,22 @@ public class Player : MonoBehaviour
 
     private void Shoot()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.TransformDirection(Vector2.up),Mathf.Infinity,~LayerMask.GetMask("Player"));
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.TransformDirection(Vector2.up), Mathf.Infinity, ~LayerMask.GetMask("Player"));
         if (hit)
         {
             GameObject ip = Instantiate(impactEffects, hit.point, Quaternion.identity);
-            Destroy(ip,0.1f);
+            Destroy(ip, 0.1f);
             anim.SetTrigger("ShootLaser");
-            line.SetPosition(0,transform.position + transform.TransformDirection(Vector2.up - new Vector2(0, 0.7f)));
-            line.SetPosition(1,hit.point);
+            line.SetPosition(0, transform.position + transform.TransformDirection(Vector2.up - new Vector2(0, 0.7f)));
+            line.SetPosition(1, hit.point);
+            if (hit.transform.GetComponent<IDamageable>() != null) {
+                hit.transform.GetComponent<IDamageable>().Damage(25);
+            }
         }
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawRay(transform.position,transform.up);
+        Gizmos.DrawRay(transform.position, transform.up);
     }
 }

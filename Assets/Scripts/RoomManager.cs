@@ -99,6 +99,17 @@ public class RoomManager : MonoBehaviour
         rooms.Add(point);
     }
 
+    [ContextMenu("Skip to next dungeon")]
+    public void NextDungeon()
+    {
+        UIManager.instance.EnemiesAlerted = 0;
+        UIManager.instance.EnemiesKilled = 0;
+        UIManager.instance.TimeSpent = 0;
+
+        amountOfEnemies++;
+        RecreateDungeon();
+    }
+
     [ContextMenu("Recreate Dungeon")]
     public void RecreateDungeon()
     {

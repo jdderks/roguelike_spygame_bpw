@@ -12,7 +12,6 @@ enum EnemyState
 
 public class Enemy : MonoBehaviour, IDamageable
 {
-
     [SerializeField] private float movementSpeed = 2f;
     [SerializeField] private float seekRange = 15f;
     [SerializeField] private LayerMask navigationLayer;
@@ -21,6 +20,8 @@ public class Enemy : MonoBehaviour, IDamageable
 
     [SerializeField] private float totalFOV = 70.0f;
     [SerializeField] private float rayRange = 10.0f;
+
+    [SerializeField] private int health = 100;
 
     private Path path;
     private Seeker seeker;
@@ -36,8 +37,13 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public void Damage(int amount)
     {
-        throw new System.NotImplementedException();
+        health -= amount;
+        if (health < 0)
+        {
+            Die();
+        }
     }
+
     private void Start()
     {
         currentState = EnemyState.Patrolling;
@@ -53,16 +59,22 @@ public class Enemy : MonoBehaviour, IDamageable
         pathfinder.repathRate = movementDestinationInterval;
     }
 
+    void Die()
+    {
+        UIManager.instance.EnemiesKilled++;
+        Destroy(gameObject);
+    }
 
     private void Update()
     {
         switch (currentState)
         {
             case EnemyState.Patrolling:
-                Patrolling();
+                Patroll();
 
                 break;
             case EnemyState.Attacking:
+                Attack();
 
                 break;
             case EnemyState.Alarmed:
@@ -73,8 +85,7 @@ public class Enemy : MonoBehaviour, IDamageable
         }
     }
 
-
-    private void Patrolling()
+    private void Patroll()
     {
         if (currentMovementTarget == null)
         {
@@ -85,13 +96,19 @@ public class Enemy : MonoBehaviour, IDamageable
 
         if (fieldOfView.visibleTargets.Contains(playerTransform))
         {
-            destinationSetter.target = playerTransform;
+            UIManager.instance.EnemiesAlerted++;
+            currentState = EnemyState.Attacking;
         }
 
         if (Vector2.Distance(transform.position, currentMovementTarget.position) < 0.2f)
         {
             currentMovementTarget = null;
         }
+    }
+
+    private void Attack()
+    {
+
     }
 
     private void Seek()
