@@ -34,6 +34,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
     private Transform currentMovementTarget = null;
 
+    private float seekTimer = 8f;
 
     public void Damage(int amount)
     {
@@ -53,7 +54,7 @@ public class Enemy : MonoBehaviour, IDamageable
         pathfinder = GetComponent<AIPath>();
         fieldOfView = GetComponent<FieldOfView>();
 
-        playerTransform = FindObjectOfType<Player>().GetComponent<Transform>(); 
+        playerTransform = FindObjectOfType<Player>().GetComponent<Transform>();
 
         pathfinder.maxSpeed = movementSpeed;
         pathfinder.repathRate = movementDestinationInterval;
@@ -87,17 +88,17 @@ public class Enemy : MonoBehaviour, IDamageable
 
     private void Patroll()
     {
+        pathfinder.maxSpeed = 2f;
         if (currentMovementTarget == null)
         {
             var neighbors = RoomManager.instance.GetNearestRooms(transform, seekRange);
-            currentMovementTarget = neighbors[Random.Range(0, neighbors.Count-1)];
+            currentMovementTarget = neighbors[Random.Range(0, neighbors.Count - 1)];
         }
         destinationSetter.target = currentMovementTarget;
 
         if (fieldOfView.visibleTargets.Contains(playerTransform))
         {
-            UIManager.instance.EnemiesAlerted++;
-            currentState = EnemyState.Attacking;
+            Aggro();
         }
 
         if (Vector2.Distance(transform.position, currentMovementTarget.position) < 0.2f)
@@ -108,17 +109,38 @@ public class Enemy : MonoBehaviour, IDamageable
 
     private void Attack()
     {
-
-    }
-
-    private void Seek()
-    {
         
-    }
+        seekTimer -= Time.deltaTime;
+        if (fieldOfView.visibleTargets.Contains(playerTransform))
+        {
+            seekTimer = 8f;
+            pathfinder.maxSpeed = 3.5f;
+        }
+        if (seekTimer > 0)
+        {
+            destinationSetter.target = playerTransform;
+        }
+        else
+        {
+            currentState = EnemyState.Patrolling;
+        }
 
+        if (Vector3.Distance(playerTransform.position, transform.position) < 1)
+        {
+            UIManager.instance.LoseGame();
+            Player p = playerTransform.GetComponent<Player>();
+        }
+    }
 
     private void OnDrawGizmos()
-    { 
-        Gizmos.DrawWireSphere(transform.position,seekRange);
+    {
+        Gizmos.DrawWireSphere(transform.position, seekRange);
+    }
+
+    public void Aggro()
+    {
+        UIManager.instance.EnemiesAlerted++;
+        seekTimer = 3f;
+        currentState = EnemyState.Attacking;
     }
 }

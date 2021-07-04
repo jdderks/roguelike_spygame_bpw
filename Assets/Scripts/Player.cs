@@ -10,6 +10,9 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject impactEffects;
     [SerializeField] private GameObject flashLight;
 
+    //Health
+    private float health = 100f;
+
     //Variables that are set in start
     private Rigidbody2D rb2d;
     private LineRenderer line;
@@ -23,6 +26,7 @@ public class Player : MonoBehaviour
     private Vector2 movement;
     private Vector2 mousePosition;
 
+    public float Health { get => health; set => health = value; }
 
     private void Start()
     {
@@ -66,7 +70,6 @@ public class Player : MonoBehaviour
     {
         for (int i = 0; i < fieldOfView.visibleTargets.Count; i++)
         {
-            Debug.Log(fieldOfView.visibleTargets[i]);
             if (fieldOfView.visibleTargets[i] != null)
             {
                 fieldOfView.visibleTargets[i].GetComponent<Wall>().DiscoverWall();
@@ -93,7 +96,11 @@ public class Player : MonoBehaviour
             line.SetPosition(0, transform.position + transform.TransformDirection(Vector2.up - new Vector2(0, 0.7f)));
             line.SetPosition(1, hit.point);
             if (hit.transform.GetComponent<IDamageable>() != null) {
-                hit.transform.GetComponent<IDamageable>().Damage(25);
+                if (hit.transform.GetComponent<Enemy>() != null)
+                {
+                    hit.transform.GetComponent<Enemy>().Aggro();
+                }
+                hit.transform.GetComponent<IDamageable>().Damage(10);
             }
         }
     }

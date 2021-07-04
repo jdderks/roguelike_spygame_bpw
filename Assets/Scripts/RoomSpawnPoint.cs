@@ -79,7 +79,7 @@ public class RoomSpawnPoint : MonoBehaviour
                 {
                     Destroy(room);
                 }
-                GameObject closedRoom = Instantiate(roomTemplates.ClosedRoom, transform.position, Quaternion.identity);
+                GameObject closedRoom = Instantiate(roomTemplates.ClosedRoom, transform.position, Quaternion.identity, roomManager.RoomsParent);
                 closedRoom.GetComponent<Room>().IsClosedRoom = true;
             }
             else

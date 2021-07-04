@@ -29,6 +29,7 @@ public class RoomManager : MonoBehaviour
 
 
     private int amountOfEnemies = 2;
+    private int enemiesInScene = 2;
 
     private float waitTime = 1f;
 
@@ -71,11 +72,11 @@ public class RoomManager : MonoBehaviour
             {
                 for (int i = 0; i < rooms.Count; i++)
                 {
-                    if (AmountOfEnemies > 0)
+                    if (enemiesInScene > 0)
                     {
                         GameObject enObj = Instantiate(enemy, rooms[Random.Range(3, rooms.Count)].transform.position, Quaternion.identity, enemiesParent);
                         Enemies.Add(enObj.GetComponent<Enemy>());
-                        AmountOfEnemies--;
+                        enemiesInScene--;
                     }
                 }
                 if (!rooms[rooms.Count - 1].IsClosedRoom)
@@ -106,7 +107,9 @@ public class RoomManager : MonoBehaviour
         UIManager.instance.EnemiesKilled = 0;
         UIManager.instance.TimeSpent = 0;
 
+        Debug.Log(amountOfEnemies);
         amountOfEnemies++;
+        enemiesInScene = amountOfEnemies;
         RecreateDungeon();
     }
 
@@ -155,7 +158,7 @@ public class RoomManager : MonoBehaviour
         setTreasure = false;
         donePlacingRooms = false;
         waitTime = 1f;
-        amountOfEnemies = 2;
+        enemiesInScene = amountOfEnemies;
 
         startingRoom = Instantiate(startingRoomPrefab, new Vector3(0, 0, 0), Quaternion.identity, roomsParent);
 
@@ -183,7 +186,6 @@ public class RoomManager : MonoBehaviour
                 nearestRooms.Add(rooms[i].transform);
             }
         }
-
         return nearestRooms;
     }
 
@@ -194,35 +196,9 @@ public class RoomManager : MonoBehaviour
             if (point.transform.position == roomSpawnPointsInScene[i].transform.position && 
                 point != roomSpawnPointsInScene[i])
             {
-                Debug.Log(point.name + " shares a position with " + roomSpawnPointsInScene[i].name);
                 return true;
             }
         }
         return false;
     }
-
-
-        //if (!point.Spawned)
-        //{
-        //    for (int i = 0; i < roomSpawnPointsInScene.Count; i++)
-        //    {
-        //        if (!roomSpawnPointsInScene[i].Spawned &&
-        //            roomSpawnPointsInScene[i] != point && 
-        //            roomSpawnPointsInScene[i].transform.position == point.transform.position &&
-        //            point.OpeningDirection != SpawnDirection.None)
-        //        {
-        //            Debug.Log(roomSpawnPointsInScene[i].name + "    " + point.name);
-        //        }
-        //    }
-        //}
 }
-//if (!roomSpawnPointsInScene[i].Spawned)
-//{
-//    for (int j = 0; j < roomSpawnPointsInScene.Count; j++)
-//    {
-//        if (!roomSpawnPointsInScene[j].Spawned && roomSpawnPointsInScene[i] != roomSpawnPointsInScene[j])
-//        {
-//            Debug.Log("YEEEEEEEEEEEEEEEEEEEEEE");
-//        }
-//    }
-//}

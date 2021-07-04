@@ -9,6 +9,9 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] private GameObject inGameMenuPanel;
     [SerializeField] private GameObject congratsPanel;
+    [SerializeField] private GameObject lossPanel;
+
+
 
     [SerializeField] private TextMeshProUGUI enemiesAlertedText;
     [SerializeField] private TextMeshProUGUI enemiesKilledText;
@@ -85,5 +88,17 @@ public class UIManager : MonoBehaviour
             inGameMenuPanel.SetActive(!inGameMenuPanel.activeInHierarchy);
             toggleTime(!inGameMenuPanel.activeInHierarchy);
         }
+    }
+
+    public void LoseGame()
+    {
+        lossPanel.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    public void QuitLoseGamePanel()
+    {
+        lossPanel.SetActive(false);
+        Time.timeScale = 1f;
     }
 }
