@@ -12,6 +12,8 @@ public class RoomManager : MonoBehaviour
 
     [SerializeField] private List<Room> rooms = new List<Room>();
 
+    [SerializeField] private List<RoomSpawnPoint> roomSpawnPointsInScene = new List<RoomSpawnPoint>();
+
     [SerializeField] private List<Enemy> enemies = new List<Enemy>();
 
     [SerializeField] private bool donePlacingRooms = false;
@@ -20,6 +22,8 @@ public class RoomManager : MonoBehaviour
     [SerializeField] private GameObject startingRoom;
 
     [SerializeField] private Player player;
+
+    private int roomsPlaced = 0;
 
     private bool setTreasure = false;
 
@@ -33,6 +37,8 @@ public class RoomManager : MonoBehaviour
     public bool DonePlacingRooms { get => donePlacingRooms; set => donePlacingRooms = value; }
     public int AmountOfEnemies { get => amountOfEnemies; set => amountOfEnemies = value; }
     public Transform RoomsParent { get => roomsParent; set => roomsParent = value; }
+    public List<RoomSpawnPoint> RoomSpawnPointsInScene { get => roomSpawnPointsInScene; set => roomSpawnPointsInScene = value; }
+    public int RoomsPlaced { get => roomsPlaced; set => roomsPlaced = value; }
 
     public static RoomManager instance;
 
@@ -42,6 +48,12 @@ public class RoomManager : MonoBehaviour
         {
             instance = this;
         }
+    }
+
+    public void UpdateRoomSpawnPointList()
+    {
+        RoomSpawnPointsInScene.Clear();
+        RoomSpawnPointsInScene.AddRange(FindObjectsOfType<RoomSpawnPoint>());
     }
 
     private void Start()
@@ -66,8 +78,13 @@ public class RoomManager : MonoBehaviour
                         AmountOfEnemies--;
                     }
                 }
-
-                Instantiate(treasureObject, rooms[rooms.Count - 1].transform.position, Quaternion.identity, rooms[rooms.Count - 1].transform);
+                if (!rooms[rooms.Count - 1].IsClosedRoom)
+                {
+                    Instantiate(treasureObject, rooms[rooms.Count - 1].transform.position, Quaternion.identity, rooms[rooms.Count - 1].transform);
+                } else
+                {
+                    Instantiate(treasureObject, rooms[rooms.Count - 2].transform.position, Quaternion.identity, rooms[rooms.Count - 1].transform);
+                }
                 setTreasure = true;
             }
         }
@@ -107,12 +124,12 @@ public class RoomManager : MonoBehaviour
 
         foreach (GameObject roomChild in roomsInDungeon)
         {
-            DestroyImmediate(roomChild);
+            Destroy(roomChild);
         }
 
         foreach (GameObject enemy in enemiesInDungeon)
         {
-            DestroyImmediate(enemy);
+            Destroy(enemy);
         }
 
         enemies.Clear();
@@ -120,20 +137,6 @@ public class RoomManager : MonoBehaviour
 
         rooms.Clear();
         roomsInDungeon.Clear();
-
-        //for (int i = 0; i < rooms.Count; i++)
-        //{
-        //    if (rooms[i].gameObject.name != "StartRoom")
-        //    {
-        //        Destroy(rooms[i].gameObject);
-        //    }
-        //}
-        //for (int i = 0; i < enemies.Count; i++)
-        //{
-        //    Destroy(enemies[i].gameObject);
-        //}
-        //rooms.Clear();
-        //enemies.Clear();
     }
 
     public void CreateDungeon()
@@ -143,7 +146,7 @@ public class RoomManager : MonoBehaviour
         waitTime = 1f;
         amountOfEnemies = 2;
 
-        startingRoom = Instantiate(startingRoomPrefab, new Vector3(0,0,0), Quaternion.identity, roomsParent);
+        startingRoom = Instantiate(startingRoomPrefab, new Vector3(0, 0, 0), Quaternion.identity, roomsParent);
 
         if (startingRoom != null)
         {
@@ -172,4 +175,43 @@ public class RoomManager : MonoBehaviour
 
         return nearestRooms;
     }
+
+    public bool CheckSpawnPoints(RoomSpawnPoint point)
+    {
+        for (int i = 0; i < roomSpawnPointsInScene.Count; i++)
+        {
+            if (point.transform.position == roomSpawnPointsInScene[i].transform.position && 
+                point != roomSpawnPointsInScene[i])
+            {
+                Debug.Log(point.name + " shares a position with " + roomSpawnPointsInScene[i].name);
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+        //if (!point.Spawned)
+        //{
+        //    for (int i = 0; i < roomSpawnPointsInScene.Count; i++)
+        //    {
+        //        if (!roomSpawnPointsInScene[i].Spawned &&
+        //            roomSpawnPointsInScene[i] != point && 
+        //            roomSpawnPointsInScene[i].transform.position == point.transform.position &&
+        //            point.OpeningDirection != SpawnDirection.None)
+        //        {
+        //            Debug.Log(roomSpawnPointsInScene[i].name + "    " + point.name);
+        //        }
+        //    }
+        //}
 }
+//if (!roomSpawnPointsInScene[i].Spawned)
+//{
+//    for (int j = 0; j < roomSpawnPointsInScene.Count; j++)
+//    {
+//        if (!roomSpawnPointsInScene[j].Spawned && roomSpawnPointsInScene[i] != roomSpawnPointsInScene[j])
+//        {
+//            Debug.Log("YEEEEEEEEEEEEEEEEEEEEEE");
+//        }
+//    }
+//}

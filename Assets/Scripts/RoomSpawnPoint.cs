@@ -15,10 +15,10 @@ public class RoomSpawnPoint : MonoBehaviour
 {
     [SerializeField] private SpawnDirection openingDirection;
     [SerializeField] private RoomTemplate roomTemplates;
+    [SerializeField] private bool spawned;
 
     private RoomManager roomManager;
 
-    private bool spawned;
 
     private int rand;
 
@@ -38,30 +38,55 @@ public class RoomSpawnPoint : MonoBehaviour
 
     public void SpawnRoom()
     {
+        roomManager.UpdateRoomSpawnPointList();
+
         if (spawned == false && CheckValidSpawnPoint())
         {
+            GameObject room = null;
             switch (OpeningDirection)
             {
                 case SpawnDirection.Bottomdoor:
                     rand = Random.Range(0, roomTemplates.Rooms.Length);
-                    Instantiate(roomTemplates.Rooms[rand], transform.position, Quaternion.identity, roomManager.RoomsParent);
+                    room = Instantiate(roomTemplates.Rooms[rand], transform.position, Quaternion.identity, roomManager.RoomsParent);
+                    room.name = "Room" + roomManager.RoomsPlaced;
+                    roomManager.RoomsPlaced++;
                     break;
                 case SpawnDirection.Topdoor:
                     rand = Random.Range(0, roomTemplates.Rooms.Length);
-                    Instantiate(roomTemplates.Rooms[rand], transform.position, Quaternion.identity, roomManager.RoomsParent);
+                    room = Instantiate(roomTemplates.Rooms[rand], transform.position, Quaternion.identity, roomManager.RoomsParent);
+                    room.name = "Room" + roomManager.RoomsPlaced;
+                    roomManager.RoomsPlaced++;
                     break;
                 case SpawnDirection.Leftdoor:
                     rand = Random.Range(0, roomTemplates.Rooms.Length);
-                    Instantiate(roomTemplates.Rooms[rand], transform.position, Quaternion.identity, roomManager.RoomsParent);
+                    room = Instantiate(roomTemplates.Rooms[rand], transform.position, Quaternion.identity, roomManager.RoomsParent);
+                    room.name = "Room" + roomManager.RoomsPlaced;
+                    roomManager.RoomsPlaced++;
                     break;
                 case SpawnDirection.Rightdoor:
                     rand = Random.Range(0, roomTemplates.Rooms.Length);
-                    Instantiate(roomTemplates.Rooms[rand], transform.position, Quaternion.identity, roomManager.RoomsParent);
+                    room = Instantiate(roomTemplates.Rooms[rand], transform.position, Quaternion.identity, roomManager.RoomsParent);
+                    room.name = "Room" + roomManager.RoomsPlaced;
+                    roomManager.RoomsPlaced++;
                     break;
                 default:
                     break;
             }
-            spawned = true;
+
+            if (roomManager.CheckSpawnPoints(this))
+            {
+                if (room != null)
+                {
+                    Destroy(room);
+                }
+                GameObject closedRoom = Instantiate(roomTemplates.ClosedRoom, transform.position, Quaternion.identity);
+                closedRoom.GetComponent<Room>().IsClosedRoom = true;
+            }
+            else
+            {
+                spawned = true;
+            }
+
         }
     }
 
@@ -76,4 +101,6 @@ public class RoomSpawnPoint : MonoBehaviour
         }
         return true;
     }
+
+
 }
