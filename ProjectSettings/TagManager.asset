@@ -19,8 +19,8 @@ TagManager:
   - Navigatable
   - Obstacle
   - Player
-  - 
-  - 
+  - NonDiscovered
+  - Discovered
   - 
   - 
   - 

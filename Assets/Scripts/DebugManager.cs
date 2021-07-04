@@ -18,15 +18,15 @@ public class DebugManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F5))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            ClearConsole();
+            //ClearConsole();
         }
     }
 
-    public static void ClearConsole()
-    {
-        var assembly = Assembly.GetAssembly(typeof(SceneView));
-        var type = assembly.GetType("UnityEditor.LogEntries");
-        var method = type.GetMethod("Clear");
-        method.Invoke(new object(), null);
-    }
+    //public static void ClearConsole()
+    //{
+    //    var assembly = Assembly.GetAssembly(typeof(SceneView));
+    //    var type = assembly.GetType("UnityEditor.LogEntries");
+    //    var method = type.GetMethod("Clear");
+    //    method.Invoke(new object(), null);
+    //}
 }

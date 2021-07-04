@@ -14,6 +14,10 @@ public class Player : MonoBehaviour
     private LineRenderer line;
     private Animator anim;
 
+
+    private FieldOfView fieldOfView;
+    [SerializeField] private LayerMask seenLayer;
+
     //Global variables
     private Vector2 movement;
     private Vector2 mousePosition;
@@ -24,6 +28,7 @@ public class Player : MonoBehaviour
         rb2d = GetComponent<Rigidbody2D>();
         line = GetComponent<LineRenderer>();
         anim = GetComponent<Animator>();
+        fieldOfView = GetComponent<FieldOfView>();
     }
 
     private void Update()
@@ -48,6 +53,20 @@ public class Player : MonoBehaviour
             {
                 flashLight.SetActive(true);
             }
+        }
+
+        if (flashLight.activeInHierarchy)
+        {
+            SetVisibleWallsToSeen();
+        }
+    }
+
+    private void SetVisibleWallsToSeen()
+    {
+        for (int i = 0; i < fieldOfView.visibleTargets.Count; i++)
+        {
+            Debug.Log(fieldOfView.visibleTargets[i]);
+            fieldOfView.visibleTargets[i].GetComponent<Wall>().DiscoverWall();
         }
     }
 
